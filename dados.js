@@ -12,7 +12,7 @@ window.DADOS = {
                     }
                 ],
     "ate":  "2026-10-06",
-    "geradoEm":  "2026-10-07 23:20",
+    "geradoEm":  "2026-10-07 23:24",
     "jogadores":  [
                       {
                           "nome":  "Andre Neves",
@@ -113,7 +113,7 @@ window.DADOS = {
                           "nome":  "Leandro Minotto",
                           "tipo":  "mensalista",
                           "inicio":  null,
-                          "fim":  null,
+                          "fim":  "2026-09",
                           "obs":  null,
                           "descontar":  [
 
