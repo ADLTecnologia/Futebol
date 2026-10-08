@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caixa do Futebol</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+<style>
+:root{
+  --bg:#f4f6f3; --card:#ffffff; --ink:#1b2620; --muted:#66736b; --line:#e2e7e3;
+  --brand:#1f8a4c; --brand-soft:#e3f3e9;
+  --ok:#1f8a4c; --ok-bg:#dcf1e3; --warn:#a86500; --warn-bg:#fdefd6; --bad:#c0392b; --bad-bg:#fbe1de;
+  --off:#eef1ef;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1512; --card:#18201b; --ink:#e6ece8; --muted:#93a198; --line:#2a352e;
+    --brand:#4cc27b; --brand-soft:#1d3326;
+    --ok:#5fd18e; --ok-bg:#1c3a28; --warn:#f0b04f; --warn-bg:#3a2c14; --bad:#ff7a6b; --bad-bg:#3d1d1a;
+    --off:#1e2721;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:20px 16px 48px}
+header h1{margin:0;font-size:1.5rem}
+header p{margin:4px 0 0;color:var(--muted);font-size:.9rem}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi small{display:block;color:var(--muted);font-size:.78rem}
+.kpi b{font-size:1.25rem;font-variant-numeric:tabular-nums}
+.kpi.main{background:var(--brand-soft);border-color:transparent}
+.kpi.main b{color:var(--brand);font-size:1.5rem}
+@media (max-width:640px){.kpis{grid-template-columns:1fr 1fr}}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:14px}
+section h2{margin:0 0 4px;font-size:1.05rem}
+section .sub{margin:0 0 12px;color:var(--muted);font-size:.85rem}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+.grade th,.grade td{padding:6px 4px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+.grade th{font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase}
+.grade td:first-child,.grade th:first-child{text-align:left;position:sticky;left:0;background:var(--card);padding-right:10px;z-index:1}
+.grade tbody tr.j{cursor:pointer}
+.grade tbody tr.j:hover td{background:var(--off)}
+.c{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:26px;border-radius:7px;font-size:.78rem;font-weight:600}
+.c.pago{background:var(--ok-bg);color:var(--ok)}
+.c.parcial{background:var(--warn-bg);color:var(--warn)}
+.c.pend{background:var(--bad-bg);color:var(--bad)}
+.c.fora{color:var(--line)}
+.c.semjogo{background:var(--off);color:var(--muted);font-weight:500;font-size:.7rem;padding:0 6px}
+.grade th small{display:block;font-weight:500;text-transform:none;font-size:.68rem}
+.saiu{text-decoration:line-through;color:var(--muted)}
+.saiu-tag{font-size:.7rem;color:var(--muted);margin-left:6px}
+.grade.ocultar tr.ex{display:none}
+.btn-ex{margin-top:10px;font:inherit;font-size:.82rem;color:var(--brand);background:none;border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+.btn-ex:hover{background:var(--off)}
+.c.aberto{background:var(--warn-bg);color:var(--warn)}
+.sit.aberto{color:var(--warn)}
+.c.pausa{background:var(--off);color:var(--muted);font-size:.72rem}
+.pausa-tag{font-size:.7rem;margin-left:6px;padding:1px 6px;border-radius:5px;background:var(--warn-bg);color:var(--warn)}
+.sit.pausa{color:var(--warn)}
+.nota{font-size:.85rem;color:var(--muted);font-style:italic;padding:6px 2px}
+.sit{font-size:.8rem;font-weight:600}
+.sit.ok{color:var(--ok)} .sit.bad{color:var(--bad)} .sit.cred{color:var(--brand)}
+tr.det td{background:var(--off);text-align:left;font-size:.82rem;color:var(--muted);white-space:normal}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:.78rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend .c{min-width:22px;height:18px}
+.mes{border-top:1px solid var(--line);padding:10px 0}
+.mes:first-of-type{border-top:0}
+.mes summary{display:flex;justify-content:space-between;gap:8px;cursor:pointer;list-style:none;font-weight:600}
+.mes summary::-webkit-details-marker{display:none}
+.mes summary::before{content:"▸";color:var(--muted);margin-right:6px;transition:transform .15s}
+.mes[open] summary::before{transform:rotate(90deg)}
+.mes summary .t{flex:1}
+.mes summary .r{font-weight:400;color:var(--muted);font-size:.85rem;text-align:right}
+.mov td{padding:6px 2px;border-bottom:1px dashed var(--line);font-size:.88rem}
+.mov tr:last-child td{border-bottom:0}
+.mov td.d{color:var(--muted);width:48px}
+.mov td.v{text-align:right;white-space:nowrap;font-weight:600}
+.pos{color:var(--ok)} .neg{color:var(--bad)}
+.tag{display:inline-block;font-size:.7rem;padding:1px 6px;border-radius:5px;background:var(--off);color:var(--muted);margin-left:6px;vertical-align:1px}
+.avulsos li{margin:2px 0}
+.pix{margin-top:14px;padding:12px 14px;border-radius:12px;background:var(--brand-soft);font-size:.9rem}
+footer{margin-top:20px;color:var(--muted);font-size:.78rem;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 id="titulo">⚽ Caixa do Futebol</h1>
+    <p id="atualizado"></p>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+  <div class="pix" id="pix" hidden></div>
+
+  <section>
+    <h2>Mensalidades</h2>
+    <p class="sub" id="subMens"></p>
+    <div class="scroll"><table class="grade ocultar" id="grade"></table></div>
+    <button type="button" class="btn-ex" id="btnEx" hidden></button>
+    <p class="nota" id="isentos" hidden></p>
+    <div class="legend">
+      <span><i class="c pago">✓</i>Pago</span>
+      <span><i class="c parcial">20</i>Pago em parte (R$)</span>
+      <span><i class="c pend">✗</i>Atrasado</span>
+      <span><i class="c aberto">⏳</i>Mês atual, a pagar</span>
+      <span><i class="c semjogo">—</i>Mês sem jogo (não cobra)</span>
+      <span><i class="c pausa">⏸</i>Em pausa (não cobra)</span>
+      <span><i class="c fora">·</i>Não participava</span>
+      <span><span class="saiu">Nome</span>Saiu do grupo</span>
+    </div>
+  </section>
+
+  <section id="secAvulsos" hidden>
+    <h2>Outras entradas</h2>
+    <p class="sub">Pagamentos avulsos, fora da mensalidade.</p>
+    <ul class="avulsos" id="avulsos"></ul>
+  </section>
+
+  <section>
+    <h2>Movimentações</h2>
+    <p class="sub">Tudo o que entrou e saiu da conta, mês a mês.</p>
+    <div id="movs"></div>
+  </section>
+
+  <footer id="rodape"></footer>
+</div>
+
+<script src="dados.js"></script>
+<script>
+(function(){
+  const D = window.DADOS;
+  const MES = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const MESX = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const brl = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+  const num = v => v.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:2});
+  const ym = s => s.slice(0,7);
+  const ddmm = s => s.slice(8,10)+'/'+s.slice(5,7);
+  const dataBR = s => s.slice(8,10)+'/'+s.slice(5,7)+'/'+s.slice(0,4);
+  const nomeMes = m => MES[+m.slice(5,7)-1]+'/'+m.slice(2,4);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function addMes(m,n){let y=+m.slice(0,4),mo=+m.slice(5,7)+n;while(mo>12){mo-=12;y++}return y+'-'+String(mo).padStart(2,'0')}
+  function meses(a,b){const r=[];for(let m=a;m<=b;m=addMes(m,1))r.push(m);return r}
+
+  const L = D.lancamentos || [];
+  const mens = D.mensalidade;
+  const ateM = ym(D.ate);
+  const cols = meses(D.inicioControle, ateM);
+  // extrato que não vai até o fim do mês = mês ainda correndo (não conta como atraso)
+  const dAte = new Date(D.ate+'T12:00:00');
+  const mesAberto = new Date(dAte.getTime()+864e5).getDate()===1 ? null : ateM;
+  const semJogo = {}; (D.semJogo || []).forEach(s => semJogo[s.mes] = s.obs || 'Sem jogo');
+
+  // Totais
+  const entradas = L.filter(l=>l.valor>0).reduce((s,l)=>s+l.valor,0);
+  const saidas = L.filter(l=>l.valor<0).reduce((s,l)=>s+l.valor,0);
+  const saldo = D.saldoInicial + entradas + saidas;
+
+  document.getElementById('titulo').textContent = '⚽ ' + D.titulo;
+  document.getElementById('atualizado').textContent = 'Extrato atualizado até ' + dataBR(D.ate);
+  document.getElementById('kpis').innerHTML = [
+    ['main','Saldo atual',brl(saldo)],
+    ['',D.saldoInicialObs || 'Saldo inicial',brl(D.saldoInicial)],
+    ['','Entradas',brl(entradas)],
+    ['','Saídas',brl(-saidas)]
+  ].map(k=>`<div class="kpi ${k[0]}"><small>${k[1]}</small><b>${k[2]}</b></div>`).join('');
+  if (D.chavePix){const p=document.getElementById('pix');p.hidden=false;p.innerHTML='Mensalidade de <b>'+brl(mens)+'</b> · Pix: <b>'+esc(D.chavePix)+'</b>';}
+
+  // Mensalistas: os pagamentos viram crédito que vai quitando os meses em ordem
+  const linhas = D.jogadores.filter(j=>j.tipo==='mensalista').map(j=>{
+    const pags = L.filter(l=>l.valor>0 && l.jogador===j.nome);
+    const ini = j.inicio || (pags.length ? ym(pags[0].data) : D.inicioControle);
+    const fim = j.fim && j.fim < ateM ? j.fim : ateM;
+    // "descontar": parte de um pix que não era mensalidade (ex.: repasse para a carne)
+    const desc = j.descontar || [];
+    let cred = pags.reduce((s,l)=>s+l.valor,0) - desc.reduce((s,d)=>s+d.valor,0);
+    // "pausas": meses parado (machucado, viagem...) — sem "ate" = pausa ainda em andamento
+    const pausas = j.pausas || [];
+    const pausaEm = m => pausas.find(p => m >= p.de && (!p.ate || m <= p.ate));
+    const pausaAtual = !j.fim && pausaEm(ateM);
+    let dev = 0, aberto = 0; const cel = {};
+    for (const m of cols){
+      if (semJogo[m]){cel[m]={st:'semjogo'};continue}
+      if (m<ini || m>fim){cel[m]={st:'fora'};continue}
+      const p = pausaEm(m);
+      if (p){cel[m]={st:'pausa',obs:p.motivo};continue}
+      if (cred >= mens-0.001){cel[m]={st:'pago'};cred-=mens}
+      // no mês em que saiu, pagamento parcial quita o mês (proporcional)
+      else if (cred > 0.001 && j.fim && m===j.fim){cel[m]={st:'pago',v:cred,obs:'Proporcional — saiu no mês'};cred=0}
+      else if (m===mesAberto){cel[m]= cred>0.001 ? {st:'parcial',v:cred} : {st:'aberto'};aberto=mens-cred;cred=0}
+      else if (cred > 0.001){cel[m]={st:'parcial',v:cred};dev+=mens-cred;cred=0}
+      else {cel[m]={st:'pend'};dev+=mens}
+    }
+    return {j,pags,desc,cel,dev,aberto,cred,pausaAtual};
+  }).sort((a,b)=>a.j.nome.localeCompare(b.j.nome,'pt-BR'));
+
+  const ativos = linhas.filter(l=>!l.j.fim);
+  const emDia = ativos.filter(l=>l.dev<0.01).length;
+  document.getElementById('subMens').textContent =
+    brl(mens)+' por mês · '+emDia+' de '+ativos.length+' sem atraso · toque no nome para ver os pix';
+
+  let h = '<thead><tr><th>Jogador</th>'+cols.map(m=>`<th>${nomeMes(m)}${semJogo[m]?'<small>sem jogo</small>':''}</th>`).join('')+'<th>Situação</th></tr></thead><tbody>';
+  linhas.forEach((l,i)=>{
+    const nome = l.j.fim ? `<span class="saiu">${esc(l.j.nome)}</span><span class="saiu-tag">saiu ${nomeMes(l.j.fim)}</span>`
+               : l.pausaAtual ? `${esc(l.j.nome)}<span class="pausa-tag">em pausa${l.pausaAtual.motivo?' · '+esc(l.pausaAtual.motivo):''}</span>`
+               : esc(l.j.nome);
+    const ex = l.j.fim ? ' ex' : '';
+    h += `<tr class="j${ex}" data-i="${i}"><td>${nome}</td>`;
+    for (const m of cols){
+      const c = l.cel[m];
+      const txt = c.st==='pago'?(c.v?num(c.v):'✓'):c.st==='pend'?'✗':c.st==='aberto'?'⏳':c.st==='parcial'?num(c.v):c.st==='semjogo'?'—':c.st==='pausa'?'⏸':'·';
+      h += `<td><i class="c ${c.st}"${c.obs?` title="${esc(c.obs)}"`:''}>${txt}</i></td>`;
+    }
+    const sit = l.dev>0.01 ? `<span class="sit bad">Deve ${brl(l.dev+l.aberto)}</span>`
+             : l.aberto>0.01 ? `<span class="sit aberto">Falta ${nomeMes(mesAberto)} · ${brl(l.aberto)}</span>`
+             : l.pausaAtual ? `<span class="sit pausa">Em pausa</span>`
+             : l.cred>0.01 ? `<span class="sit cred">Em dia · crédito ${brl(l.cred)}</span>`
+             : `<span class="sit ok">Em dia</span>`;
+    h += `<td>${sit}</td></tr>`;
+    let pixs = l.pags.length ? l.pags.map(p=>dataBR(p.data)+' '+brl(p.valor)).join(' · ') : 'Nenhum pix recebido.';
+    if (l.desc.length) pixs += ' — não conta como mensalidade: ' + l.desc.map(d=>brl(d.valor)+' de '+dataBR(d.data)+(d.obs?' ('+esc(d.obs)+')':'')).join(', ');
+    h += `<tr class="det${ex}" data-d="${i}" hidden><td colspan="${cols.length+2}">${pixs}</td></tr>`;
+  });
+  h += '</tbody>';
+  const grade = document.getElementById('grade');
+  grade.innerHTML = h;
+  grade.addEventListener('click',e=>{
+    const tr = e.target.closest('tr.j'); if(!tr) return;
+    const d = grade.querySelector(`tr[data-d="${tr.dataset.i}"]`); d.hidden = !d.hidden;
+  });
+
+  // Quem saiu fica escondido; o botão mostra/oculta
+  const nEx = linhas.length - ativos.length;
+  const btnEx = document.getElementById('btnEx');
+  if (nEx){
+    const rotulo = () => grade.classList.contains('ocultar') ? `Mostrar quem saiu (${nEx})` : 'Ocultar quem saiu';
+    btnEx.hidden = false; btnEx.textContent = rotulo();
+    btnEx.addEventListener('click',()=>{ grade.classList.toggle('ocultar'); btnEx.textContent = rotulo(); });
+  }
+
+  const isentos = D.jogadores.filter(j=>j.tipo==='isento');
+  if (isentos.length){
+    const el = document.getElementById('isentos'); el.hidden = false;
+    el.textContent = 'Não pagam mensalidade: ' + isentos.map(j=>j.nome+(j.obs?' ('+j.obs+')':'')).join(', ');
+  }
+
+  // Avulsos / não identificados
+  const outros = {};
+  const obsDe = {}; D.jogadores.forEach(j=>{ if(j.obs) obsDe[j.nome]=j.obs; });
+  L.filter(l=>l.valor>0 && l.categoria!=='mensalista').forEach(l=>{
+    const k = l.descricao + (l.categoria==='nao_identificado'?' (não identificado)': obsDe[l.jogador]?' ('+obsDe[l.jogador]+')':'');
+    (outros[k] = outros[k] || []).push(l);
+  });
+  const ks = Object.keys(outros);
+  if (ks.length){
+    document.getElementById('secAvulsos').hidden = false;
+    document.getElementById('avulsos').innerHTML = ks.sort().map(k=>{
+      const ls = outros[k]; const t = ls.reduce((s,l)=>s+l.valor,0);
+      return `<li><b>${esc(k)}</b>: ${brl(t)} <span class="tag">${ls.map(l=>ddmm(l.data)+' '+brl(l.valor)).join(' · ')}</span></li>`;
+    }).join('');
+  }
+
+  // Movimentações por mês (mais recente primeiro) com saldo ao fim de cada mês
+  const porMes = {}; L.forEach(l=>{(porMes[ym(l.data)] = porMes[ym(l.data)] || []).push(l)});
+  let acum = D.saldoInicial; const blocos = [];
+  meses(D.inicioControle, ateM).forEach(m=>{
+    const ls = porMes[m] || [];
+    const e = ls.filter(l=>l.valor>0).reduce((s,l)=>s+l.valor,0);
+    const s = ls.filter(l=>l.valor<0).reduce((s,l)=>s+l.valor,0);
+    acum += e + s;
+    blocos.push({m,ls,e,s,saldo:acum});
+  });
+  const rot = {mensalista:'mensalidade',avulso:'avulso',nao_identificado:'não identificado'};
+  document.getElementById('movs').innerHTML = blocos.reverse().map((b,i)=>`
+    <details class="mes"${i===0?' open':''}>
+      <summary><span class="t">${MESX[+b.m.slice(5,7)-1]} ${b.m.slice(0,4)}</span>
+        <span class="r"><span class="pos">+${brl(b.e)}</span> · <span class="neg">${brl(b.s)}</span><br>saldo ${brl(b.saldo)}</span></summary>
+      ${semJogo[b.m]?`<div class="nota">⚽ ${esc(semJogo[b.m])}</div>`:''}
+      <table class="mov">${b.ls.length ?b.ls.map(l=>`<tr><td class="d">${ddmm(l.data)}</td><td>${esc(l.descricao)}${rot[l.categoria]?`<span class="tag">${rot[l.categoria]}</span>`:''}</td><td class="v ${l.valor>0?'pos':'neg'}">${l.valor>0?'+':''}${brl(l.valor)}</td></tr>`).join('') : '<tr><td>Sem movimentações.</td></tr>'}</table>
+    </details>`).join('');
+
+  document.getElementById('rodape').textContent = 'Gerado em ' + dataBR(D.geradoEm.slice(0,10));
+})();
+</script>
+</body>
+</html>
