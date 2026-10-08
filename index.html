@@ -128,9 +128,9 @@ footer{margin-top:20px;color:var(--muted);font-size:.78rem;text-align:center}
   <footer id="rodape"></footer>
 </div>
 
-<script src="dados.js"></script>
 <script>
-(function(){
+// dados.js é carregado com ?t=agora para o celular não mostrar dados antigos do cache
+function render(){
   const D = window.DADOS;
   const MES = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
   const MESX = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -282,6 +282,13 @@ footer{margin-top:20px;color:var(--muted);font-size:.78rem;text-align:center}
     </details>`).join('');
 
   document.getElementById('rodape').textContent = 'Gerado em ' + dataBR(D.geradoEm.slice(0,10));
+}
+(function(){
+  const s = document.createElement('script');
+  s.src = 'dados.js?t=' + Date.now();
+  s.onload = render;
+  s.onerror = () => { document.getElementById('atualizado').textContent = 'Não foi possível carregar os dados. Recarregue a página.'; };
+  document.head.appendChild(s);
 })();
 </script>
 </body>
