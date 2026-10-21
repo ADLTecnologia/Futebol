@@ -11,8 +11,8 @@ window.DADOS = {
       "obs": "Janeiro sem jogo"
     }
   ],
-  "ate": "2026-10-18",
-  "geradoEm": "2026-10-19 09:11",
+  "ate": "2026-10-20",
+  "geradoEm": "2026-10-21 18:48",
   "jogadores": [
     {
       "nome": "Andre Neves",
@@ -748,6 +748,27 @@ window.DADOS = {
       "jogador": "Valdoir Savi",
       "categoria": "mensalista",
       "descricao": "Valdoir Savi"
+    },
+    {
+      "data": "2026-10-19",
+      "valor": 50,
+      "jogador": "Andre Neves",
+      "categoria": "mensalista",
+      "descricao": "Andre Neves"
+    },
+    {
+      "data": "2026-10-19",
+      "valor": 50,
+      "jogador": "Everton Calvete",
+      "categoria": "mensalista",
+      "descricao": "Everton Calvete"
+    },
+    {
+      "data": "2026-10-19",
+      "valor": 50,
+      "jogador": null,
+      "categoria": "nao_identificado",
+      "descricao": "Daniel da Silva Savi"
     }
   ]
 };
