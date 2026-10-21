@@ -12,7 +12,7 @@ window.DADOS = {
     }
   ],
   "ate": "2026-10-20",
-  "geradoEm": "2026-10-21 18:54",
+  "geradoEm": "2026-10-21 18:57",
   "jogadores": [
     {
       "nome": "Andre Neves",
@@ -168,6 +168,15 @@ window.DADOS = {
     },
     {
       "nome": "Themilis",
+      "tipo": "isento",
+      "inicio": null,
+      "fim": null,
+      "obs": "goleiro",
+      "descontar": [],
+      "pausas": []
+    },
+    {
+      "nome": "Uilson",
       "tipo": "isento",
       "inicio": null,
       "fim": null,
