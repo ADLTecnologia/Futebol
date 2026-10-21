@@ -12,7 +12,7 @@ window.DADOS = {
     }
   ],
   "ate": "2026-10-20",
-  "geradoEm": "2026-10-21 18:48",
+  "geradoEm": "2026-10-21 18:50",
   "jogadores": [
     {
       "nome": "Andre Neves",
@@ -120,6 +120,15 @@ window.DADOS = {
       "nome": "Valdoir Savi",
       "tipo": "mensalista",
       "inicio": "2026-02",
+      "fim": null,
+      "obs": null,
+      "descontar": [],
+      "pausas": []
+    },
+    {
+      "nome": "Daniel Savi",
+      "tipo": "mensalista",
+      "inicio": "2026-10",
       "fim": null,
       "obs": null,
       "descontar": [],
@@ -766,9 +775,9 @@ window.DADOS = {
     {
       "data": "2026-10-19",
       "valor": 50,
-      "jogador": null,
-      "categoria": "nao_identificado",
-      "descricao": "Daniel da Silva Savi"
+      "jogador": "Daniel Savi",
+      "categoria": "mensalista",
+      "descricao": "Daniel Savi"
     }
   ]
 };
