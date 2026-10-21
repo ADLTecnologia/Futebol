@@ -12,7 +12,7 @@ window.DADOS = {
     }
   ],
   "ate": "2026-10-20",
-  "geradoEm": "2026-10-21 18:57",
+  "geradoEm": "2026-10-21 19:10",
   "jogadores": [
     {
       "nome": "Andre Neves",
@@ -112,6 +112,11 @@ window.DADOS = {
           "data": "2026-07-13",
           "valor": 10,
           "obs": "repassado para a carne"
+        },
+        {
+          "data": "2026-10-21",
+          "valor": 38,
+          "obs": "repassado para Maravai"
         }
       ],
       "pausas": []
