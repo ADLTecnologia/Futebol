@@ -12,7 +12,7 @@ window.DADOS = {
     }
   ],
   "ate": "2026-10-20",
-  "geradoEm": "2026-10-21 18:50",
+  "geradoEm": "2026-10-21 18:54",
   "jogadores": [
     {
       "nome": "Andre Neves",
